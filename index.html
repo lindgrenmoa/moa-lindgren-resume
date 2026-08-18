@@ -1,0 +1,626 @@
+<title>Moa Lindgren</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=Manrope:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+  :root{
+    --bg: #FAFAF7;
+    --surface: #F3F2ED;
+    --surface-raised: #FFFFFF;
+    --ink: #1B1B18;
+    --ink-soft: #4A4A44;
+    --ink-faint: #7A7972;
+    --border: #E2DFD4;
+    --border-soft: #EAE7DC;
+    --accent: #1F3A5F;
+    --accent-ink: #FFFFFF;
+    --accent-soft: #E4E9EE;
+    --moss: #6B7A3F;
+    --moss-soft: #E9ECDD;
+    --rail: #C7C2AE;
+    --timeline: #E8A39A;
+    --timeline-current: #D97563;
+    --shadow: 0 1px 2px rgba(32,36,29,0.06), 0 8px 24px -12px rgba(32,36,29,0.18);
+  }
+
+  *{ box-sizing: border-box; }
+  ::selection{ background: var(--moss-soft); color: var(--ink); }
+
+  html{ scroll-behavior: smooth; }
+  @media (prefers-reduced-motion: reduce){
+    html{ scroll-behavior: auto; }
+    *{ animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; }
+  }
+
+  body{
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: "Manrope", ui-sans-serif, system-ui, sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  a{ color: var(--accent); text-decoration-color: color-mix(in srgb, var(--accent) 40%, transparent); text-underline-offset: 3px; }
+  a:hover{ text-decoration-color: var(--accent); }
+  a:focus-visible, button:focus-visible{ outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 2px; }
+
+  .mono{ font-family: "IBM Plex Mono", ui-monospace, monospace; }
+
+  h1,h2,h3{ font-family: "Sora", ui-sans-serif, system-ui, sans-serif; font-weight: 600; text-wrap: balance; margin: 0; }
+
+  /* ---------- shell ---------- */
+  .shell{
+    display: grid;
+    grid-template-columns: 220px minmax(0,1fr);
+    max-width: 1180px;
+    margin: 0 auto;
+  }
+  @media (max-width: 980px){
+    .shell{ grid-template-columns: 1fr; }
+  }
+
+  /* ---------- nav ---------- */
+  .toc{
+    position: sticky;
+    top: 0;
+    align-self: start;
+    height: 100dvh;
+    padding: 3rem 1.25rem 2rem 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  @media (max-width: 980px){
+    .toc{
+      position: static;
+      height: auto;
+      padding: 1.5rem 1.5rem 0.5rem;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border);
+      flex-wrap: wrap;
+      gap: 0.75rem;
+    }
+    .toc .toc-mark{ margin-bottom: 0; }
+    .toc-foot{ display: none; }
+  }
+  .toc-mark{
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin-bottom: 2.5rem;
+  }
+  .toc-mark .glyph{
+    width: 30px; height: 30px;
+    border: 1px solid var(--ink);
+    border-radius: 50%;
+    display: grid; place-items: center;
+    font-family: "Sora", sans-serif;
+    font-weight: 600;
+    font-size: 0.95rem;
+    flex: none;
+  }
+  .toc-mark .who{ font-size: 0.72rem; letter-spacing: 0.06em; color: var(--ink-soft); line-height: 1.3; }
+  .toc-links{ display: flex; flex-direction: column; gap: 0.85rem; }
+  @media (max-width: 980px){ .toc-links{ flex-direction: row; flex-wrap: wrap; gap: 1.1rem; } }
+  .toc-links a{
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    text-decoration: none;
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+  }
+  .toc-links a:hover{ color: var(--accent); }
+  .toc-links a span.n{ color: var(--rail); font-size: 0.68rem; }
+  .toc-foot{ font-size: 0.68rem; color: var(--ink-faint); line-height: 1.6; }
+  .toc-foot a{ color: var(--ink-faint); }
+
+  .print-btn{
+    margin-top: 1.5rem;
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--ink-soft);
+    padding: 0.55rem 0.8rem;
+    border-radius: 3px;
+    cursor: pointer;
+    text-align: left;
+  }
+  .print-btn:hover{ border-color: var(--accent); color: var(--accent); }
+
+  /* ---------- main ---------- */
+  main{ padding: 3rem 2rem 6rem; min-width: 0; }
+  @media (max-width: 980px){ main{ padding: 2.25rem 1.5rem 4rem; } }
+  .wrap{ max-width: 760px; }
+
+  /* ---------- masthead ---------- */
+  .masthead{ padding-bottom: 2.75rem; margin-bottom: 2.75rem; border-bottom: 1px solid var(--border); }
+  .kicker{
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--moss);
+    margin-bottom: 1rem;
+  }
+  h1.name{ font-size: clamp(2.6rem, 6vw, 3.6rem); line-height: 1.05; letter-spacing: -0.01em; }
+  h1.name em{ font-style: normal; font-weight: 500; color: var(--accent); }
+  .role{ font-size: 1.05rem; color: var(--ink-soft); margin-top: 0.85rem; max-width: 46ch; }
+  .contact-line{
+    margin-top: 1.75rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem 1.5rem;
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.78rem;
+    color: var(--ink-soft);
+  }
+  .contact-line a{ color: var(--ink-soft); text-decoration: none; border-bottom: 1px solid var(--border); }
+  .contact-line a:hover{ color: var(--accent); border-color: var(--accent); }
+
+  /* ---------- field record ---------- */
+  .postings{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 1.75rem;
+  }
+  .posting-chip{
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.02em;
+    padding: 0.3rem 0.6rem;
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    color: var(--ink-soft);
+    background: var(--surface);
+    white-space: nowrap;
+  }
+
+  /* ---------- section headers ---------- */
+  section{ scroll-margin-top: 2rem; }
+  .section-head{
+    display: flex;
+    align-items: baseline;
+    gap: 0.9rem;
+    margin-bottom: 2rem;
+  }
+  .section-head .idx{
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.75rem;
+    color: var(--rail);
+  }
+  .section-head h2{ font-size: 1.55rem; }
+  section + section{ margin-top: 4rem; }
+
+  /* ---------- timeline ---------- */
+  .timeline{ position: relative; }
+  .entry{
+    position: relative;
+    padding-left: 1.6rem;
+    border-left: 1px solid var(--timeline);
+    padding-bottom: 2.6rem;
+  }
+  .entry:last-child{ padding-bottom: 0; border-left-color: transparent; background: linear-gradient(var(--timeline), var(--timeline)) 0 0/1px 2.2rem no-repeat; }
+  .entry::before{
+    content: "";
+    position: absolute;
+    left: -4.5px;
+    top: 0.4rem;
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--timeline);
+  }
+  .entry.current::before{ background: var(--timeline-current); }
+  .entry-date{
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.04em;
+    color: var(--ink-faint);
+    margin-bottom: 0.4rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .tag-current{
+    font-size: 0.62rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    background: var(--moss-soft);
+    color: var(--moss);
+    padding: 0.12rem 0.4rem;
+    border-radius: 2px;
+  }
+  .entry h3{ font-size: 1.2rem; line-height: 1.3; }
+  .entry .org{ color: var(--ink-soft); font-size: 0.92rem; margin-top: 0.25rem; }
+  .entry ul{ margin: 0.9rem 0 0; padding-left: 1.1rem; }
+  .entry li{ margin-bottom: 0.5rem; color: var(--ink-soft); font-size: 0.95rem; }
+  .entry li::marker{ color: var(--rail); }
+  .entry li a{ color: inherit; text-decoration-color: var(--border); }
+
+  .addl{
+    margin-top: 2.2rem;
+    padding: 1rem 1.2rem;
+    background: var(--surface);
+    border: 1px solid var(--border-soft);
+    border-radius: 4px;
+    font-size: 0.9rem;
+    color: var(--ink-soft);
+  }
+  .addl .label{ font-family: "IBM Plex Mono", monospace; font-size: 0.68rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-faint); display:block; margin-bottom: 0.3rem; }
+
+  /* ---------- education / cards ---------- */
+  .card-list{ display: flex; flex-direction: column; gap: 1.5rem; }
+  .card{
+    padding: 1.5rem 1.6rem;
+    background: var(--surface);
+    border: 1px solid var(--border-soft);
+    border-radius: 6px;
+  }
+  .card-top{ display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; flex-wrap: wrap; }
+  .card h3{ font-size: 1.12rem; }
+  .card .org{ color: var(--ink-soft); font-size: 0.9rem; margin-top: 0.3rem; }
+  .card .date{ font-family: "IBM Plex Mono", monospace; font-size: 0.72rem; color: var(--ink-faint); white-space: nowrap; }
+  .card .thesis{ margin-top: 0.85rem; font-size: 0.9rem; color: var(--ink-soft); border-left: 2px solid var(--moss); padding-left: 0.8rem; }
+  .card .thesis .label{ font-family: "IBM Plex Mono", monospace; font-size: 0.65rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--moss); display: block; margin-bottom: 0.25rem; }
+
+  /* ---------- certifications ---------- */
+  .cert-group{ margin-bottom: 1.6rem; }
+  .cert-group:last-child{ margin-bottom: 0; }
+  .cert-group-head{ display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; margin-bottom: 0.7rem; flex-wrap: wrap; }
+  .cert-group-head h3{ font-size: 1.02rem; font-weight: 600; font-family: "Libre Franklin", sans-serif; }
+  .cert-group-head .date{ font-family: "IBM Plex Mono", monospace; font-size: 0.72rem; color: var(--ink-faint); }
+  .cert-group ul{ margin: 0; padding-left: 1.1rem; }
+  .cert-group li{ font-size: 0.92rem; color: var(--ink-soft); margin-bottom: 0.4rem; }
+  .cert-group li::marker{ color: var(--rail); }
+
+  /* ---------- trust grid ---------- */
+  .trust-grid{ display: grid; grid-template-columns: repeat(2,1fr); gap: 1.1rem; }
+  @media (max-width: 640px){ .trust-grid{ grid-template-columns: 1fr; } }
+  .trust-item{ padding: 1.1rem 1.2rem; border: 1px solid var(--border-soft); border-radius: 6px; background: var(--surface); }
+  .trust-item h3{ font-size: 0.98rem; font-family: "Manrope", sans-serif; font-weight: 700; }
+  .trust-item .date{ font-family: "IBM Plex Mono", monospace; font-size: 0.68rem; color: var(--ink-faint); margin-top: 0.3rem; }
+  .trust-item p{ font-size: 0.88rem; color: var(--ink-soft); margin: 0.5rem 0 0; }
+
+  /* ---------- footer ---------- */
+  footer{
+    margin-top: 5rem;
+    padding-top: 2.5rem;
+    border-top: 1px solid var(--border);
+  }
+  .footer-grid{ display: grid; grid-template-columns: repeat(3,1fr); gap: 2rem; }
+  @media (max-width: 640px){ .footer-grid{ grid-template-columns: 1fr; } }
+  .footer-col .label{ font-family: "IBM Plex Mono", monospace; font-size: 0.68rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--moss); margin-bottom: 0.7rem; display: block; }
+  .footer-col ul{ list-style: none; margin: 0; padding: 0; }
+  .footer-col li{ font-size: 0.9rem; color: var(--ink-soft); margin-bottom: 0.35rem; }
+  .footer-col li b{ color: var(--ink); font-weight: 500; }
+  .colophon{ margin-top: 3rem; font-family: "IBM Plex Mono", monospace; font-size: 0.68rem; color: var(--ink-faint); }
+
+  @media print{
+    .toc{ display: none; }
+    .shell{ grid-template-columns: 1fr; max-width: 100%; }
+    body{ background: #fff; color: #111; font-size: 12px; }
+    .card, .trust-item, .addl, .posting-chip{ background: #fff; border-color: #ccc; }
+    a{ color: inherit; text-decoration: none; }
+    section + section{ margin-top: 2rem; }
+    main{ padding: 1rem 0.5rem; }
+  }
+</style>
+
+<div class="shell">
+  <nav class="toc">
+    <div>
+      <div class="toc-mark">
+        <span class="glyph" aria-hidden="true">M</span>
+        <span class="who">Moa<br>Lindgren</span>
+      </div>
+      <div class="toc-links">
+        <a href="#profile"><span class="n">01</span>Profile</a>
+        <a href="#experience"><span class="n">02</span>Experience</a>
+        <a href="#education"><span class="n">03</span>Education</a>
+        <a href="#certifications"><span class="n">04</span>Courses</a>
+        <a href="#trust"><span class="n">05</span>Trust &amp; extras</a>
+        <a href="#contact"><span class="n">06</span>Contact</a>
+      </div>
+      <button class="print-btn" onclick="window.print()" type="button">↓ Save / print</button>
+    </div>
+    <div class="toc-foot">
+      Geneva, Switzerland<br>
+      Updated Aug 2026
+    </div>
+  </nav>
+
+  <main>
+    <div class="wrap">
+
+      <header class="masthead" id="profile">
+        <div class="kicker">Curriculum vitae — dispatch no. 2026/08</div>
+        <h1 class="name">Moa<br><em>Lindgren</em></h1>
+        <p class="role">Knowledge management and communications professional working across labour policy and the humanitarian&ndash;development&ndash;peace nexus, currently with the International Labour Organization in Geneva.</p>
+        <div class="contact-line">
+          <a href="mailto:lindgren.moa@gmail.com">lindgren.moa@gmail.com</a>
+          <a href="tel:+46763237372">+46 76 323 73 72</a>
+          <span>Swedish (native) · English (professional) · French (intermediate)</span>
+        </div>
+        <div class="postings" aria-label="Countries and cities of field work">
+          <span class="posting-chip">Geneva, CH</span>
+          <span class="posting-chip">Stockholm, SE</span>
+          <span class="posting-chip">Kampala &amp; Gulu, UG</span>
+          <span class="posting-chip">Bangkok, TH</span>
+          <span class="posting-chip">Kigali, RW</span>
+          <span class="posting-chip">Nairobi, KE</span>
+          <span class="posting-chip">Western Balkans</span>
+          <span class="posting-chip">Turkmenistan</span>
+          <span class="posting-chip">Indonesia</span>
+        </div>
+      </header>
+
+      <section id="experience">
+        <div class="section-head"><span class="idx">02</span><h2>Experience</h2></div>
+        <div class="timeline">
+
+          <article class="entry current">
+            <div class="entry-date">Mar 2025 &ndash; Jun 2026 <span class="tag-current">Current</span></div>
+            <h3>Knowledge Management and Communications Officer</h3>
+            <div class="org">ILO Priority Action Programme on Decent Work in Crisis and Post-Crisis Situations (AP/CRISIS) &middot; International Labour Organization &middot; Geneva</div>
+            <ul>
+              <li>Coordinate development of a knowledge repository on decent work across the humanitarian&ndash;development&ndash;peace nexus (HDPN), consulting field offices, HQ technical departments, and external partners including UN agencies to shape content and architecture around user needs.</li>
+              <li>Support knowledge-building on inter-agency coordination in crisis-affected settings, with emphasis on the role of local partners, including workers' and employers' organizations.</li>
+              <li>Co-organize internal and external knowledge-sharing events with partners including the UN Peacebuilding and Peace Support Office, FAO, the Geneva Peacebuilding Platform, and UNDP.</li>
+              <li>Develop and disseminate good practices on decent work and HDPN operationalization, drawing lessons from Haiti, Syria, Afghanistan, Mozambique, Burkina Faso, Mali, Niger, Togo, Ukraine, Guatemala, Colombia, and Sri Lanka.</li>
+              <li>Analyze development cooperation funds allocated to crisis-affected areas to support intra-organizational learning on the ILO's engagement across regions.</li>
+              <li>Support Terms of Reference, procurement, and other team administration.</li>
+              <li>Develop communication strategies and content &mdash; including engagement during the International Labour Conference, graphic design, and Drupal webpage development &mdash; to highlight inter-agency work in crisis settings.</li>
+              <li>Support monitoring and learning under the Sida&ndash;ILO partnership's HDPN component.</li>
+              <li>Contribute to field data collection on forced and child labour in Turkmenistan's cotton supply chain, via surveys, key informant interviews, and focus group discussions.</li>
+            </ul>
+          </article>
+
+          <article class="entry">
+            <div class="entry-date">Nov 2024 &ndash; Feb 2025</div>
+            <h3>Junior Technical Officer</h3>
+            <div class="org">Employment, Labour Market, and Youth Branch, Employment Policy Department &middot; International Labour Organization &middot; Geneva</div>
+            <ul>
+              <li>Contributed technical background materials and analysis of national employment strategies, identifying trends in labour market inclusion and youth employment.</li>
+              <li>Prepared and updated training materials for the ILO&ndash;ITCILO Employment Academy, aimed at government, trade union, and employer representatives.</li>
+              <li>Assisted in producing publications through analysis, drafting, and quality review, including the <em>Reference Guide on Employment Impact Assessment</em>, 2nd edition (ILO, 2025).</li>
+              <li>Mapped content across two databases &mdash; the ILO Employment Policy Gateway and the ILO Child Labour Observatory &mdash; to identify synergies and gaps.</li>
+            </ul>
+          </article>
+
+          <article class="entry">
+            <div class="entry-date">May &ndash; Oct 2024</div>
+            <h3>Employment Policy Intern</h3>
+            <div class="org">Employment, Labour Market, and Youth Branch, Employment Policy Department &middot; International Labour Organization &middot; Geneva</div>
+            <ul>
+              <li>Supported departmental objectives through mapping and analysis of country-specific labour market strategies.</li>
+              <li>Co-authored <em>Digital Transformation in Employment Policies</em> (ILO, 2025), including research, drafting, and quality review.</li>
+              <li>Supported a project proposal to combat child labour and promote a safe, inclusive, sustainable transition to work for young people aged 14&ndash;18.</li>
+              <li>Supported communication and visibility activities for ILO Conventions on employment policy and private employment agencies, including during the International Labour Conference.</li>
+              <li>Elected staff union representative, ILO Intern Board, advocating for fair internships and inclusion of young professionals in organizational decision-making.</li>
+            </ul>
+          </article>
+
+          <article class="entry">
+            <div class="entry-date">Feb 2022 &ndash; Apr 2024</div>
+            <h3>Project Administrator</h3>
+            <div class="org">Development Cooperation Unit, Director General's Office &middot; Swedish Public Employment Service &middot; Stockholm</div>
+            <ul>
+              <li>Organized capacity-building workshops in Bangkok, Kigali, Nairobi, and Stockholm on youth employment, digitalization, active labour market policies, and social protection targeting the most vulnerable populations.</li>
+              <li>Managed administration for Sida-funded international training programmes in social protection and decent work across agencies and local/international partners.</li>
+              <li>Contributed to Sida and EU donor reporting through participant evaluations, project reports, and partner dialogue.</li>
+              <li>Conducted fact-finding missions to the Western Balkans to adapt field interventions to local political realities.</li>
+              <li>Arranged knowledge exchanges for employment service representatives from Rwanda and Azerbaijan on digitalization, private-sector collaboration, TVET, and support for priority groups.</li>
+              <li>Built partnerships across governments, ministries, donors, and international organizations to support long-term labour market initiatives.</li>
+              <li>Led an inter-agency working group on capacity development within Swedish agencies.</li>
+              <li>Elected occupational safety and health representative, conducting internal risk assessments.</li>
+            </ul>
+          </article>
+
+          <article class="entry">
+            <div class="entry-date">May 2020 &ndash; Feb 2022</div>
+            <h3>Claims Officer, Unemployment Insurance</h3>
+            <div class="org">Insurance Division &middot; Akademikernas Erk&auml;nda A-kassa (AEA) &middot; Stockholm</div>
+            <ul>
+              <li>Analyzed unemployment benefit applications, ensuring compliant handling and granting benefits to eligible job seekers.</li>
+              <li>Provided legal advice to job seekers, employers, and social insurance authorities on unemployment insurance.</li>
+              <li>Elected occupational safety and health representative, conducting internal risk assessments and consultations.</li>
+            </ul>
+          </article>
+
+          <article class="entry">
+            <div class="entry-date">Jun &ndash; Sep 2019</div>
+            <h3>Political and Communications Officer</h3>
+            <div class="org">Section for Political Affairs, Trade Promotion and Communication &middot; Swedish Embassy &middot; Kampala, Uganda</div>
+            <ul>
+              <li>Appointed focal point for Ebola reporting, representing the embassy in meetings with other missions and UN agencies to inform reporting to the Swedish Ministry of Foreign Affairs.</li>
+              <li>Managed the embassy's social media, including a proposal for a joint Nordic social media channel.</li>
+              <li>Curated and synthesized first-hand accounts from national human rights defenders into reports and public-facing advocacy articles.</li>
+              <li>Supported reorganization and archiving of diplomatic records under strict data-retention and security protocols.</li>
+              <li>Supported day-to-day operations across Political Affairs, Trade Promotion and Communication, Development Cooperation, and Administration.</li>
+            </ul>
+          </article>
+
+          <article class="entry">
+            <div class="entry-date">Jan &ndash; Jun 2019</div>
+            <h3>Political and Communications Intern</h3>
+            <div class="org">Section for Political Affairs, Trade Promotion and Communication &middot; Swedish Embassy &middot; Kampala, Uganda</div>
+            <ul>
+              <li>Monitored political, human rights, and social developments, drafting and reviewing embassy briefing notes for the Ministry for Foreign Affairs.</li>
+              <li>Led planning and coordination of a diplomatic event for 700+ guests from ministries, missions, international organizations, and civil society.</li>
+              <li>Contributed to consultations with affected persons in Gulu, Northern Uganda, on access to justice for women.</li>
+              <li>Co-organized a Wikipedia hack-a-thon for International Women's Day to close gender gaps in online content.</li>
+              <li>Supported a regional youth climate change awareness competition for high schools in Kampala.</li>
+            </ul>
+          </article>
+
+          <div class="addl">
+            <span class="label">Also on record</span>
+            <b>Special needs tutor</b> &middot; Rydsbergsskolan's specialized primary school, Lerum Municipality &middot; Fall semesters 2018 &amp; 2019 &mdash; designed and taught tailored elementary lessons incorporating children's rights, participation, and inclusion.
+          </div>
+
+        </div>
+      </section>
+
+      <section id="education">
+        <div class="section-head"><span class="idx">03</span><h2>Education</h2></div>
+        <div class="card-list">
+
+          <div class="card">
+            <div class="card-top">
+              <div>
+                <h3>Master's in Communication for Development</h3>
+                <div class="org">Malm&ouml; University &middot; Malm&ouml;, Sweden</div>
+              </div>
+              <div class="date">Aug 2021 &ndash; Jun 2023</div>
+            </div>
+            <div class="thesis">
+              <span class="label">Thesis</span>
+              &ldquo;This is not the time for a lecture&rdquo; &mdash; Intercultural Collaboration for Labor Market Inclusion from the Perspective of Cambodian Partners: A Qualitative Case Study Examining Intercultural Collaboration through a Postcolonial Lens.
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-top">
+              <div>
+                <h3>Bachelor's in Development Studies</h3>
+                <div class="org">Specialization in sociology and welfare policies &middot; Lund University &middot; Lund, Sweden</div>
+              </div>
+              <div class="date">Aug 2015 &ndash; Jun 2018</div>
+            </div>
+            <div class="thesis">
+              <span class="label">Thesis</span>
+              Mapping Socioeconomic Disincentives to Public Health Insurance Utilization Among Informal Sector Workers: A Case Study of Lombok, Indonesia.
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-top">
+              <div>
+                <h3>Course in Practical EU Knowledge</h3>
+                <div class="org">University of Gothenburg &middot; Gothenburg, Sweden</div>
+              </div>
+              <div class="date">Aug &ndash; Dec 2020</div>
+            </div>
+            <div class="thesis">
+              <span class="label">Final project</span>
+              Tracing the Process of EU Directive 2019/904 on the Reduction of the Impact of Certain Plastic Products on the Environment.
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <section id="certifications">
+        <div class="section-head"><span class="idx">04</span><h2>Professional courses &amp; certifications</h2></div>
+
+        <div class="cert-group">
+          <div class="cert-group-head">
+            <h3>International Training Centre, International Labour Organization</h3>
+            <span class="date">Dec 2024 &ndash; Oct 2025</span>
+          </div>
+          <ul>
+            <li>Data collection and research on child labour and forced labour</li>
+            <li>International Labour Standards: Business and Decent Work &mdash; An Introduction to the MNE Declaration</li>
+            <li>The Labour Dimension of National Action Plans on Business and Human Rights</li>
+            <li>Formalization of the Informal Economy</li>
+          </ul>
+        </div>
+
+        <div class="cert-group">
+          <div class="cert-group-head">
+            <h3>Sida Partnership Forum</h3>
+            <span class="date">Oct 2023</span>
+          </div>
+          <ul>
+            <li>The significance of digitalization in poverty alleviation and sustainable development</li>
+          </ul>
+        </div>
+
+        <div class="cert-group">
+          <div class="cert-group-head">
+            <h3>Sida Partnership Forum</h3>
+            <span class="date">May 2022</span>
+          </div>
+          <ul>
+            <li>International development collaboration for public sector personnel</li>
+          </ul>
+        </div>
+      </section>
+
+      <section id="trust">
+        <div class="section-head"><span class="idx">05</span><h2>Trust assignments &amp; other competencies</h2></div>
+        <div class="trust-grid">
+
+          <div class="trust-item">
+            <h3>Representative to the staff union (elected)</h3>
+            <div class="date">ILO Intern Board &middot; May &ndash; Oct 2024</div>
+          </div>
+
+          <div class="trust-item">
+            <h3>Safety and health officer (elected)</h3>
+            <div class="date">Director General's Office, Employment Service central office &middot; Mar 2021 &ndash; Feb 2022</div>
+          </div>
+
+          <div class="trust-item">
+            <h3>Safety and health officer (elected)</h3>
+            <div class="date">Insurance department, Akademikernas Erk&auml;nda A-kassa &middot; Mar 2021 &ndash; Feb 2022</div>
+          </div>
+
+          <div class="trust-item">
+            <h3>Sida scholarship recipient</h3>
+            <div class="date">2017 / 2018</div>
+            <p>Fieldwork in Indonesia on social security, inclusion, and access to universal healthcare for people in the informal economy.</p>
+          </div>
+
+          <div class="trust-item">
+            <h3>Certified Ashtanga/Hatha Yoga Instructor</h3>
+            <div class="date">200 hours &middot; Vrinda School of Yoga, Varkala, India</div>
+          </div>
+
+        </div>
+      </section>
+
+      <footer id="contact">
+        <div class="footer-grid">
+          <div class="footer-col">
+            <span class="label">Contact</span>
+            <ul>
+              <li><b>Email</b> lindgren.moa@gmail.com</li>
+              <li><b>Phone</b> +46 76 323 73 72</li>
+              <li><b>Based in</b> Geneva, Switzerland</li>
+            </ul>
+          </div>
+          <div class="footer-col">
+            <span class="label">Languages</span>
+            <ul>
+              <li><b>Swedish</b> &mdash; native</li>
+              <li><b>English</b> &mdash; professional</li>
+              <li><b>French</b> &mdash; intermediate</li>
+            </ul>
+          </div>
+          <div class="footer-col">
+            <span class="label">Tools</span>
+            <ul>
+              <li>Microsoft Office</li>
+              <li>Canva, Adobe InDesign &amp; Photoshop</li>
+              <li>Drupal (webpage development)</li>
+              <li>B driver's licence</li>
+            </ul>
+          </div>
+        </div>
+        <div class="colophon">Curriculum vitae of Moa Lindgren &middot; Geneva, Switzerland &middot; last updated August 2026</div>
+      </footer>
+
+    </div>
+  </main>
+</div>
